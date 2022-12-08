@@ -3,13 +3,15 @@
 import 'package:GID/core/ui_constants.dart';
 import 'package:flutter/material.dart';
 
-import 'package:GID/core/ui_color_constant.dart';
-
 class AppEditText extends StatefulWidget {
   final String? hint;
   final bool isObscure;
   final double height;
   final int maxLines;
+  final bool autoCorrect;
+  final bool enableSuggestions;
+  final TextInputType keyboardType;
+  final TextEditingController? controller;
 
   const AppEditText({
     Key? key,
@@ -17,6 +19,10 @@ class AppEditText extends StatefulWidget {
     this.isObscure = false,
     this.height = 70,
     this.maxLines = 1,
+    this.autoCorrect = true,
+    this.enableSuggestions = false,
+    this.keyboardType = TextInputType.none,
+    this.controller,
   }) : super(key: key);
 
   @override
@@ -37,7 +43,11 @@ class _AppEditTextState extends State<AppEditText> {
       ),
       child: Center(
         child: TextFormField(
+          controller: widget.controller,
           maxLines: widget.maxLines,
+          autocorrect: widget.autoCorrect,
+          keyboardType: widget.keyboardType,
+          enableSuggestions: widget.enableSuggestions,
           obscureText: (widget.isObscure && hidePassword),
           decoration: InputDecoration(
               suffixIcon: widget.isObscure

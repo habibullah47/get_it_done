@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "250452260600",
+    "project_id": "gid-todo-flutter-app",
+    "storage_bucket": "gid-todo-flutter-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:250452260600:android:668827206df7c69cceed0d",
+        "android_client_info": {
+          "package_name": "com.aflion.gid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "250452260600-loc2n895iepg0qfangqcmdk70a75jrg7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAn1voGy5k7eFWkNZlFv_pbFaCbcbU_t6k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "250452260600-loc2n895iepg0qfangqcmdk70a75jrg7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
