@@ -21,7 +21,7 @@ class AppEditText extends StatefulWidget {
     this.maxLines = 1,
     this.autoCorrect = true,
     this.enableSuggestions = false,
-    this.keyboardType = TextInputType.none,
+    this.keyboardType = TextInputType.text,
     this.controller,
   }) : super(key: key);
 

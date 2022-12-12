@@ -6,6 +6,7 @@ import 'package:GID/ui/screens/auth/reset_password_screen.dart';
 import 'package:GID/ui/screens/home/home_nav_bar_screen.dart';
 import 'package:GID/ui/widgets/app_button.dart';
 import 'package:GID/ui/widgets/app_edit_text.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -16,107 +17,41 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-_getMainColumnUpperBody() {
-  return Expanded(
-    flex: 4,
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          "Welcome to",
-          style: TextStyle(
-            fontSize: 45,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        Text("Get It Done",
-            style: TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
-                color: hexToColor(greyDark))),
-        gap36,
-        const AppEditText(hint: "Email"),
-        gap18,
-        const AppEditText(hint: "Password", isObscure: true),
-        gap36,
-        AppButton(
-            onTap: () {
-              debugPrint("login pressed");
-              Get.to(() => const HomeNavbarScreen());
-            },
-            title: "Get In"),
-      ],
-    ),
-  );
+late final TextEditingController _email;
+late final TextEditingController _password;
+
+@override
+void initState() {
+  _email = TextEditingController();
+  _password = TextEditingController();
+  initState();
 }
 
-_getMainColumnLowerBody() {
-  return Expanded(
-    flex: 3,
-    child: Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text('Forgot password?'),
-            TextButton(
-              onPressed: () {
-                Get.to(const ResetPasswordScreen());
-              },
-              child: const Text(
-                ' Reset now!',
-                style: TextStyle(color: Color.fromARGB(255, 69, 167, 79)),
-              ),
-            ),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text('Not a member?'),
-            TextButton(
-              onPressed: () {
-                Get.to(const RegistrationScreen());
-              },
-              child: const Text(
-                ' Join Now',
-                style: TextStyle(color: Color.fromARGB(255, 69, 167, 79)),
-              ),
-            ),
-          ],
-        ),
-        gap36,
-        divider,
-        gap36,
-        const Center(child: Text("Or Sign in with")),
-        gap24,
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(
-              child: AppButton(
-                onTap: () {
-                  debugPrint("google oauth");
-                },
-                title: "Google",
-                whiteButtton: true,
-              ),
-            ),
-            gap10,
-            Expanded(
-              child: AppButton(
-                onTap: () {},
-                title: 'facebook',
-              ),
-            ),
-          ],
-        ),
-      ],
-    ),
-  );
+@override
+void dispose() {
+  _email.dispose();
+  _password.dispose();
+  dispose();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  late final TextEditingController _email;
+  late final TextEditingController _password;
+
+  @override
+  void initState() {
+    _email = TextEditingController();
+    _password = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _email.dispose();
+    _password.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -125,9 +60,118 @@ class _LoginScreenState extends State<LoginScreen> {
         padding: padding24,
         child: Column(
           children: [
-            _getMainColumnUpperBody(),
+            Expanded(
+              flex: 4,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Welcome to",
+                    style: TextStyle(
+                      fontSize: 45,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text("Get It Done",
+                      style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          color: hexToColor(greyDark))),
+                  gap36,
+                  AppEditText(
+                    keyboardType: TextInputType.emailAddress,
+                    controller: _email,
+                    hint: "Email",
+                  ),
+                  gap18,
+                  AppEditText(
+                    keyboardType: TextInputType.visiblePassword,
+                    controller: _password,
+                    hint: "Password",
+                    isObscure: true,
+                  ),
+                  gap36,
+                  AppButton(
+                    onTap: () async {
+                      debugPrint("login pressed");
+                      final email = _email.text;
+                      final password = _password.text;
+
+                      await FirebaseAuth.instance.signInWithEmailAndPassword(
+                          email: email, password: password);
+                      Get.to(() => const HomeNavbarScreen());
+                    },
+                    title: "Get In",
+                  ),
+                ],
+              ),
+            ),
             gap48,
-            _getMainColumnLowerBody(),
+            Expanded(
+              flex: 3,
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text('Forgot password?'),
+                      TextButton(
+                        onPressed: () {
+                          Get.to(const ResetPasswordScreen());
+                        },
+                        child: const Text(
+                          ' Reset now!',
+                          style: TextStyle(
+                              color: Color.fromARGB(255, 69, 167, 79)),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text('Not a member?'),
+                      TextButton(
+                        onPressed: () {
+                          Get.to(const RegistrationScreen());
+                        },
+                        child: const Text(
+                          ' Join Now',
+                          style: TextStyle(
+                              color: Color.fromARGB(255, 69, 167, 79)),
+                        ),
+                      ),
+                    ],
+                  ),
+                  gap36,
+                  divider,
+                  gap36,
+                  const Center(child: Text("Or Sign in with")),
+                  gap24,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: AppButton(
+                          onTap: () {
+                            debugPrint("google oauth");
+                          },
+                          title: "Google",
+                          whiteButtton: true,
+                        ),
+                      ),
+                      gap10,
+                      Expanded(
+                        child: AppButton(
+                          onTap: () {},
+                          title: 'facebook',
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),

@@ -1,7 +1,11 @@
 import 'package:GID/core/ui_constants.dart';
+import 'package:GID/ui/screens/auth/starting_screen.dart';
 import 'package:GID/ui/screens/settings/brand_logo_widg.dart';
 import 'package:GID/ui/screens/settings/setting_list_button.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'dart:developer' as devtools show log;
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -94,7 +98,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
             ),
             onPressed: () {
-              //[add] show Alert Dialog here.
+              FirebaseAuth.instance.signOut();
+
+              Get.to(() => const StartingScreen());
+
+              //![add] show Alert Dialog here.
             },
             child: Container(
               margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 140),

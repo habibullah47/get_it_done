@@ -1,9 +1,14 @@
+import 'dart:developer' as devtools show log;
+
 import 'package:GID/core/ui_color_constant.dart';
 import 'package:GID/core/ui_constants.dart';
 import 'package:GID/firebase_options.dart';
 import 'package:GID/ui/screens/auth/login_screen.dart';
+import 'package:GID/ui/screens/auth/starting_screen.dart';
+import 'package:GID/ui/screens/auth/verify_email_screen.dart';
 import 'package:GID/ui/widgets/app_button.dart';
 import 'package:GID/ui/widgets/app_edit_text.dart';
+import 'package:GID/utilities/show_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -88,15 +93,43 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       isObscure: true,
                     ),
                     AppButton(
-                        onTap: () async {
-                          final email = _email.text;
-                          final password = _password.text;
-                          final userCredential = await FirebaseAuth.instance
+                      onTap: () async {
+                        final email = _email.text;
+                        final password = _password.text;
+
+                        try {
+                          await FirebaseAuth.instance
                               .createUserWithEmailAndPassword(
                                   email: email, password: password);
-                          print(userCredential);
-                        },
-                        title: 'Register Now'),
+                          await FirebaseAuth.instance.currentUser!
+                              .sendEmailVerification();
+                          final user = FirebaseAuth.instance.currentUser;
+
+                          if (user!.emailVerified != true) {
+                            Get.to(() => const VerifyEmailScreen());
+                            devtools.log('Verify your email first');
+                          }
+                        } on FirebaseAuthException catch (e) {
+                          // devtools.log(e.code);
+                          if (e.code == 'email-already-in-use') {
+                            await showErrorDialog(
+                                context, 'Please provide a new e-mail address');
+                          } else if (e.code == 'invalid-email') {
+                            await showErrorDialog(context,
+                                'Please provide a valid e-mail address');
+                          } else if (e.code == 'weak-password') {
+                            await showErrorDialog(context,
+                                'Passwords must be at least 6 characters');
+                          } else if (e.code == 'operation-not-allowed') {
+                            await showErrorDialog(context,
+                                'Please provide a unique e-mail address');
+                          } else {
+                            await showErrorDialog(context, 'An error occured');
+                          }
+                        }
+                      },
+                      title: 'Register Now',
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -108,7 +141,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           child: const Text(
                             ' Sign in',
                             style: TextStyle(
-                                color: Color.fromARGB(255, 69, 167, 79)),
+                              color: Color.fromARGB(255, 69, 167, 79),
+                            ),
                           ),
                         ),
                       ],

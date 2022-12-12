@@ -4,16 +4,6 @@ import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
 
-/// Default [FirebaseOptions] for use with your Firebase apps.
-///
-/// Example:
-/// ```dart
-/// import 'firebase_options.dart';
-/// // ...
-/// await Firebase.initializeApp(
-///   options: DefaultFirebaseOptions.currentPlatform,
-/// );
-/// ```
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
@@ -67,7 +57,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '250452260600',
     projectId: 'gid-todo-flutter-app',
     storageBucket: 'gid-todo-flutter-app.appspot.com',
-    iosClientId: '250452260600-nfmdb7sv9kjigg9hr28ds1jd1ha6gdhm.apps.googleusercontent.com',
+    iosClientId:
+        '250452260600-nfmdb7sv9kjigg9hr28ds1jd1ha6gdhm.apps.googleusercontent.com',
     iosBundleId: 'com.aflion.gid',
   );
 
@@ -77,7 +68,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '250452260600',
     projectId: 'gid-todo-flutter-app',
     storageBucket: 'gid-todo-flutter-app.appspot.com',
-    iosClientId: '250452260600-nfmdb7sv9kjigg9hr28ds1jd1ha6gdhm.apps.googleusercontent.com',
+    iosClientId:
+        '250452260600-nfmdb7sv9kjigg9hr28ds1jd1ha6gdhm.apps.googleusercontent.com',
     iosBundleId: 'com.aflion.gid',
   );
 }
